@@ -1,0 +1,71 @@
+# @format
+
+consumes:
+  - application/json
+info:
+  title: call-me
+  version: 0.1.0
+paths:
+  /maybe:
+    get:
+      summary: Check if there is an open slot
+      operationId: GetMaybe
+      parameters:
+        - $ref: "#/parameters/Environment"
+      security:
+        - APIKeyHeader: []
+      responses:
+        200: { description: OK }
+        403: { description: Forbidden }
+        500: { $ref: "#/responses/InternalServerError" }
+    post:
+      summary: Take an open slot
+      operationId: PostMaybe
+      parameters:
+        - $ref: "#/parameters/Environment"
+      security:
+        - APIKeyHeader: []
+      responses:
+        201: { description: Created }
+        403: { description: Forbidden }
+        500: { $ref: "#/responses/InternalServerError" }
+    delete:
+      summary: Free a token slot
+      operationId: DeleteMaybe
+      security:
+        - APIKeyHeader: []
+      parameters:
+        - $ref: "#/parameters/Environment"
+      responses:
+        500: { $ref: "#/responses/InternalServerError" }
+        204: { description: No Content }
+
+produces:
+  - application/json
+schemes:
+  - http
+swagger: "2.0"
+
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: X-API-KEY
+
+definitions:
+  principal:
+    type: string
+
+responses:
+  InternalServerError:
+    description: Internal Server Error
+    schema:
+      type: string
+
+parameters:
+  Environment:
+    in: query
+    name: environment
+    type: string
+    description: Environment name
+    required: true
